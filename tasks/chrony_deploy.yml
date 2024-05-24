@@ -1,0 +1,29 @@
+---
+
+- name: ensure tasks run only on selected os releases
+  block:
+
+    - name: install chrony
+      ansible.builtin.package:
+        name: chrony
+        state: present
+      notify: restart chronyd
+
+    #TODO: implement some sort of idempotency
+    - name: configure time sources
+      ansible.builtin.blockinfile:
+        path: /etc/chrony.conf
+        marker: "##### {mark} chrony sources #####"
+        block: "{{ time_source }}"
+        state: present
+      notify: restart chronyd
+
+    - name: start chronyd on boot
+      ansible.builtin.service:
+        name: chronyd
+        state: started
+        enabled: true
+
+  when: ansible_distribution == "Fedora"
+
+...
