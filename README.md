@@ -9,12 +9,8 @@ ansible role for chrony deployment
 
 ## examples
 ```
----
-
 - name: deploy chrony
   ansible.builtin.include_role:
     name: time_synchronization
     tasks_from: chrony_deploy.yml
-
-...
 ```
